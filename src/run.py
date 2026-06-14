@@ -1,15 +1,15 @@
 import sys
-from pathlib import Path
+import os
 
-# Erebus copies this file into its controller directory before executing it.
-# Prefer the current directory during local runs, then fall back to this project.
-local_src = Path(__file__).resolve().parent
-project_src = Path.home() / "Documents" / "Pj copy 3" / "src"
-src_dir = local_src if (local_src / "main.py").is_file() else project_src
+# Erebus가 이 파일을 robot0Controller.py로 복사해서 실행하므로
+# __file__ 기반 경로가 src/를 가리키지 않을 수 있음.
+# 아래 경로를 이 PC의 실제 src/ 절대 경로로 유지할 것.
+src_dir = r'/Users/siheon/Downloads/pyo-main/src'
 
-if not (src_dir / "main.py").is_file():
-    raise ModuleNotFoundError(f"main.py was not found in {src_dir}")
+# 혹시 직접 실행하는 경우 대비 fallback
+if not os.path.isdir(src_dir):
+    src_dir = os.path.dirname(os.path.abspath(__file__))
 
-sys.path.insert(0, str(src_dir))
+sys.path.insert(0, src_dir)
 
 import main
