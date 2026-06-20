@@ -237,7 +237,7 @@ class RescueRobot:
 
     @property
     def victim_letter(self):
-        """카메라에서 탐지된 2026 wall token 보고 코드를 반환합니다 (H/S/U/F/P/C/O).
+        """카메라에서 탐지된 조난자 글자를 반환합니다 (H/S/U/P/F/C/O).
 
         Returns:
             글자 문자열, 없으면 None, 이미 보고된 곳이면 None
@@ -293,7 +293,8 @@ class RescueRobot:
     def send_final_map(self):
         """완성된 지도를 서버로 보냅니다. 미션 중에도 중간 저장 용도로 사용할 수 있습니다."""
         final_matrix = self._final_matrix_creator.pixel_grid_to_final_grid(
-            self._mapper.pixel_grid, self._mapper.start_position
+            self._mapper.pixel_grid, self._mapper.start_position,
+            area4_positions=self._mapper.area_tracker.area4_positions
         )
         self._robot.comunicator.send_map(final_matrix)
         print("[RescueRobot] 최종 지도 전송 완료")

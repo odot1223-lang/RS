@@ -112,6 +112,9 @@ class Robot:
         self.lidar.set_orientation(self.orientation)
         self.lidar.update()
 
+        # 벽 거리유지: 전방 벽 근접 여부를 구동 베이스에 전달(전진 모드 차단용)
+        self.drive_base.front_blocked = self.lidar.front_blocked
+
         self.right_camera.update(self.orientation)
         self.left_camera.update(self.orientation)
         self.center_camera.update(self.orientation)
@@ -137,10 +140,6 @@ class Robot:
     def move_wheels(self, left_ratio, right_ratio):
         """좌/우 바퀴를 비율(-1.0~1.0)로 구동합니다."""
         self.drive_base.move_wheels(left_ratio, right_ratio)
-
-    def has_valid_position(self):
-        """GPS가 첫 유효 위치 샘플을 반환했는지 확인합니다."""
-        return self.gps.has_valid_position
 
     def rotate_to_angle(self, angle, direction=Criteria.CLOSEST):
         """지정 각도(도 단위)로 회전합니다. 완료 시 True 반환."""
